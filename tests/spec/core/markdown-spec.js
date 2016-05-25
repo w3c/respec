@@ -1,5 +1,5 @@
 "use strict";
-describe("Core - Markdown", function() {
+fdescribe("Core - Markdown", function() {
   afterAll(function(done) {
     flushIframes();
     done();
@@ -236,6 +236,22 @@ describe("Core - Markdown", function() {
         expect(anchors.length).toEqual(0);
         expect(doc.querySelector("a[href='http://no-links-foo.com']")).toBeFalsy();
         expect(doc.querySelector("a[href='http://no-links-bar.com']")).toBeFalsy();
+      }).then(done);
+    });
+
+    it("it correctly handles quoted elements", function(done){
+      var ops = {
+        config: makeBasicConfig(),
+        body: makeDefaultBody() +
+          "<p id='test-text1'>outer text\n\"<code>inner text</code>\".</p>\n" +
+          "<p id='test-text2'>outer\n   \"`inner`\".</p>"
+      };
+      ops.config.format = "markdown";
+      makeRSDoc(ops, function(doc) {
+        var text1 = doc.getElementById("test-text1").textContent;
+        expect(text1).toEqual("outer text \"inner text\".");
+        var text2 = doc.getElementById("test-text2").innerHTML;
+        expect(text2).toEqual("outer \"<code>inner</code>\".");
       }).then(done);
     });
   });
