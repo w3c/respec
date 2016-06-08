@@ -44,6 +44,7 @@ const optionList = [{
 }, {
   alias: "t",
   defaultValue: 10,
+  description: "How long to wait before timing out (in seconds).",
   name: "timeout",
   type: Number,
 }, {
