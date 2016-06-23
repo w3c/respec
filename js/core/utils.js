@@ -1,4 +1,5 @@
-/*jshint laxcomma: true*/
+/*jshint browser: true */
+/*globals console*/
 // Module core/utils
 // As the name implies, this contains a ragtag gang of methods that just don't fit
 // anywhere else.
@@ -6,6 +7,29 @@
 define(
   ["core/pubsubhub"],
   function(pubsubhub) {
+    var resourceHints = new Set([
+      "dns-prefetch",
+      "preconnect",
+      "preload",
+      "prerender",
+    ]);
+    var fetchDestinations = new Set([
+      "document",
+      "embed",
+      "font",
+      "image",
+      "manifest",
+      "media",
+      "object",
+      "report",
+      "script",
+      "serviceworker",
+      "sharedworker",
+      "style",
+      "worker",
+      "xslt",
+      "",
+    ]);
     var utils = {
       /**
        * Allows a node to be swapped into a different document at
@@ -77,6 +101,49 @@ define(
             return Math.min(match.length, smallest);
           }, +Infinity);
         return (leftPad === +Infinity) ? 0 : leftPad;
+      },
+      /**
+       * Creates a link element to use as a resource hint.
+       *
+       * @param  {Object} opts Configure the resource hint.
+       * @param {String} opts.hint The type of hint.
+       * @param {URL|String} opts.href The URL for the resource or origin.
+       * @param {String} [opts.corsMode] Optional, the CORS mode to use.
+       * @return {HTMLLinkElement} A link element ready to use.
+       */
+      createResourceHint(opts) {
+        if(!opts || typeof opts !== "object"){
+          throw TypeError("Missing options");
+        }
+        if (!resourceHints.has(opts.hint)) {
+          throw new TypeError("Invalid resources hint");
+        }
+        var url = new URL(opts.href, document.location);
+        var linkElem = document.createElement("link");
+        var href = url.href;
+        linkElem.rel = opts.hint;
+        switch (linkElem.rel) {
+          case "dns-prefetch":
+          case "preconnect":
+            href = url.origin;
+            if (opts.corsMode || url.origin !== document.location.origin) {
+              linkElem.crossOrigin = opts.corsMode || "anonymous";
+            }
+            break;
+          case "preload":
+            if ("as" in opts && typeof opts.as === "string") {
+              if (!fetchDestinations.has(opts.as)) {
+                console.warn("Unknown request destination: " + opts.as);
+              }
+              linkElem.setAttribute("as", opts.as);
+            }
+            break;
+          case "prerender":
+            linkElem.href = url.href;
+            break;
+        }
+        linkElem.href = href;
+        return linkElem;
       },
 
       /**
