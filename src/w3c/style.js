@@ -50,7 +50,7 @@ function createMetaViewport() {
 function createBaseStyle() {
   const link = document.createElement("link");
   link.rel = "stylesheet";
-  link.href = "https://www.w3.org/StyleSheets/TR/2016/base.css";
+  link.href = `https://rawcdn.githack.com/w3c/tr-design/d40b24073ad733316a3cd5235fa0ab950cbf23dc/src/base.css`;
   link.classList.add("removeOnSave");
   return link;
 }
@@ -84,7 +84,7 @@ function createResourceHints() {
     },
     {
       hint: "preload", // all specs include on base.css.
-      href: "https://www.w3.org/StyleSheets/TR/2016/base.css",
+      href: `https://rawcdn.githack.com/w3c/tr-design/d40b24073ad733316a3cd5235fa0ab950cbf23dc/src/base.css`,
       as: "style",
     },
     {
@@ -169,8 +169,8 @@ export function run(conf) {
       { once: true }
     );
   }
-  const finalVersionPath = version ? `${version}/` : "";
-  const finalStyleURL = `https://www.w3.org/StyleSheets/TR/${finalVersionPath}${styleFile}`;
+  // const finalVersionPath = version ? `${version}/` : "";
+  const finalStyleURL = `https://rawcdn.githack.com/w3c/tr-design/d40b24073ad733316a3cd5235fa0ab950cbf23dc/src/${styleFile}`;
   linkCSS(document, finalStyleURL);
   // Make sure the W3C stylesheet is the last stylesheet, as required by W3C Pub Rules.
   const moveStyle = styleMover(finalStyleURL);

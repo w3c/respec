@@ -16,7 +16,10 @@ dfn {
   margin-top: 0.6em;
   font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
   background: #fff;
+  background: var(--indextable-hover-bg);
   color: black;
+  color: var(--text);
+  /* TODO: box-shadow color */
   box-shadow: 0 1em 3em -0.4em rgba(0, 0, 0, 0.3),
     0 0 1px 1px rgba(0, 0, 0, 0.05);
   border-radius: 2px;
@@ -33,10 +36,13 @@ dfn {
   border: 10px solid transparent;
   border-top: 0;
   border-bottom: 10px solid #fff;
+  border-bottom-color: var(--indextable-hover-bg);
   top: 0;
 }
 .dfn-panel:not(.docked) > .caret::before {
   border-bottom: 9px solid #a2a9b1;
+  /* TODO: need slightly darker shade */
+  border-bottom-color: var(--indextable-hover-bg);
 }
 
 .dfn-panel * {
@@ -46,11 +52,13 @@ dfn {
 .dfn-panel b {
   display: block;
   color: #000;
+  color: var(--text);
   margin-top: 0.25em;
 }
 
 .dfn-panel ul a[href] {
   color: #333;
+  color: var(--text);
 }
 
 .dfn-panel > div {

@@ -15,8 +15,14 @@
 }
 
 /* Override code highlighter background */
+/* MAYBE IGNORE THIS. It matches with Bikeshed though */
 .hljs {
-  background: transparent !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+@media (prefers-color-scheme: dark) {
+  .hljs {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
 }
 
 /* --- INLINES --- */
@@ -87,12 +93,12 @@ th code {
 }
 
 a[href].orcid {
-    padding-left: 4px;
-    padding-right: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 a[href].orcid > svg {
-    margin-bottom: -2px;
+  margin-bottom: -2px;
 }
 
 /* --- TOC --- */
@@ -100,11 +106,6 @@ a[href].orcid > svg {
 .toc a,
 .tof a {
   text-decoration: none;
-}
-
-a .secno,
-a .figno {
-  color: #000;
 }
 
 ul.tof,
@@ -230,6 +231,7 @@ h6 {
   position: relative;
 }
 
+/* QUESTION: why aside only? */
 aside.example .marker > a.self-link {
   color: inherit;
 }
