@@ -21,9 +21,22 @@ export function run(conf) {
     return;
   }
 
+  /**
+   * Skip links without hashes; and those that point to outside current page.
+   * @returns
+   */
+  const shouldTest = (() => {
+    const { origin, pathname } = new URL(document.baseURI);
+    /** @type {(a: HTMLAnchorElement) => boolean} */
+    const fn = a => a.hash && a.origin === origin && a.pathname === pathname;
+    return fn;
+  })();
+
   /** @type {NodeListOf<HTMLAnchorElement>} */
-  const elems = document.querySelectorAll("a[href^='#']");
-  const offendingElements = [...elems].filter(isBrokenHyperlink);
+  const elems = document.querySelectorAll("a[href]");
+  const offendingElements = [...elems]
+    .filter(shouldTest)
+    .filter(isBrokenHyperlink);
   if (offendingElements.length) {
     showWarning(l10n.msg, name, {
       hint: l10n.hint,
@@ -32,8 +45,9 @@ export function run(conf) {
   }
 }
 
+/** @param {HTMLAnchorElement} elem */
 function isBrokenHyperlink(elem) {
-  const id = elem.getAttribute("href").substring(1);
+  const id = decodeURIComponent(elem.hash.substring(1));
   const doc = elem.ownerDocument;
   return !doc.getElementById(id) && !doc.getElementsByName(id).length;
 }
